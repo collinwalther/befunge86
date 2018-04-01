@@ -27,8 +27,8 @@ $(BUILDDIR)/%.o:    $(SRCDIR)/%.$(SRCEXT)
 test:               $(OBJECTS) $(TSTOBJS)
 	
 $(BUILDDIR)/%.out:      $(TSTDIR)/%.$(SRCEXT)
-	@$(CC) $(CFLAGS) $(INC) -o $@ $^ $(OBJECTS)
-	@./$@
+	$(CC) $(CFLAGS) $(INC) -o $@ $^ $(OBJECTS)
+	./$@
 
 clean:
 	$(RM) -r $(BUILDDIR) $(TARGET)
