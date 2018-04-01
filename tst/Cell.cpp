@@ -6,7 +6,7 @@ int main() {
     assert(c->GetChar() == 'a');
 
     c = new Cell('>');
-    assert(c->GetChar() == 'x');
+    assert(c->GetChar() == '>');
 
     return 0;
 }
