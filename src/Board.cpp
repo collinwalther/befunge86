@@ -20,11 +20,12 @@ std::vector<Cell *> Board::GetRowAt(int rowIndex) {
         throw std::invalid_argument("Index must be within the bounds of the playing field.");
     }
 
-    std::vector<Cell *> row;
-    for (Cell *c : *(GetCells()[rowIndex])) {
-        row.push_back(c);
+    std::vector<Cell *> newRow;
+    std::vector<Cell *> row = *(GetCells()[rowIndex]);
+    for (int i = 0; i < row.size(); i++) {
+        newRow.push_back(row[i]);
     }
-    return row; 
+    return newRow; 
 }
 
 std::vector<Cell *> Board::GetColumnAt(int columnIndex) {
@@ -48,8 +49,8 @@ void Board::SetRowAt(std::vector<Cell *> row, int rowIndex) {
         throw std::invalid_argument("New row must have an index greater than or equal to 0.");
     } else if (rowIndex < GetHeight()) {
         std::vector<Cell *> *newRow = new std::vector<Cell *>();
-        for (Cell *c : row) {
-            newRow->push_back(c);
+        for (int i = 0; i < row.size(); i++) {
+            newRow->push_back(row[i]);
         }
         _cells[rowIndex] = newRow;
     } else {

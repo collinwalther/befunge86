@@ -13,8 +13,8 @@ void Befunge::GetCellsFromLines() {
         // For every character in the line, create a
         // cell from it and push it onto our cells.
         std::vector<Cell *> row;
-        for (char c : line) {
-            row.push_back(new Cell(c));
+        for (int i = 0; i < line.size(); i++) {
+            row.push_back(new Cell(line[i]));
         }
         _board.SetRowAt(row, lineNumber);
         lineNumber++;
@@ -32,8 +32,8 @@ void Befunge::Run() {
 
     for (int i = 0; i < _board.GetHeight(); i++) {
         std::vector<Cell *> row = _board.GetRowAt(i);
-        for (Cell *c : row) {
-            std::cout << *c;
+        for (int i = 0; i < row.size(); i++) {
+            std::cout << *(row[i]);
         }
         std::cout << std::endl;
     }
@@ -42,8 +42,8 @@ void Befunge::Run() {
 
     for (int i = 0; i < _board.GetWidth(); i++) {
         std::vector<Cell *> column = _board.GetColumnAt(i);
-        for (Cell *c : column) {
-            std::cout << *c;
+        for (int i = 0; i < column.size(); i++) {
+            std::cout << *(column[i]);
         }
         std::cout << std::endl;
     }
