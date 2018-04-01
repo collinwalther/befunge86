@@ -24,8 +24,12 @@ std::vector<Cell *> Board::GetRowAt(int rowIndex) {
 
     std::vector<Cell *> newRow;
     std::vector<Cell *> row = *(GetCells()[rowIndex]);
-    for (int i = 0; i < row.size(); i++) {
-        newRow.push_back(row[i]);
+    for (int i = 0; i < GetWidth(); i++) {
+        if (i < row.size()) {
+            newRow.push_back(row[i]);
+        } else {
+            newRow.push_back(new Cell(' '));
+        }
     }
     return newRow; 
 }
