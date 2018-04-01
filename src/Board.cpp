@@ -6,6 +6,8 @@ Board::Board() {
 }
 
 Board::Board(char** b, int width, int height) {
+    _height = 0;
+    _width = 0;
     for (int i = 0; i < height; i++) {
         std::vector<Cell *> row;
         for (int j = 0; j < width; j++) {
@@ -52,6 +54,7 @@ void Board::SetRowAt(std::vector<Cell *> row, int rowIndex) {
         for (int i = 0; i < row.size(); i++) {
             newRow->push_back(row[i]);
         }
+
         _cells[rowIndex] = newRow;
     } else {
         for (int i = GetHeight(); i < rowIndex; i++) {
