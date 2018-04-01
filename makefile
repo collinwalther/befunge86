@@ -1,26 +1,35 @@
-SRCS = Cell.cpp Befunge.cpp Board.cpp
-OBJS = $(SRCS:.cpp=.o)
-VPATH = src/
-CC = g++
-CFLAGS = -Wall -I src/
+CC          = g++
+SRCDIR      = src
+TSTDIR      = tst
+BUILDDIR    = build
+TARGET      = bin/befunge
+MAIN        = $(SRCDIR)/main.$(SRCEXT)
 
-%.o:%.cpp
-	$(CC) $(CFLAGS) $< -c -o $@
+SRCEXT      = cpp
+SOURCES     = $(subst $(MAIN), , $(shell find $(SRCDIR) -type f -name *.$(SRCEXT)))
+OBJECTS     = $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
+TESTS       = $(shell find $(TSTDIR) -type f -name *.$(SRCEXT))
+TSTOBJS     = $(patsubst $(TSTDIR)/%, $(BUILDDIR)/%, $(TESTS:.$(SRCEXT)=.out))
+CFLAGS      = -Wall
+INC         = -I include/
 
-all:        src test build
+.PHONY:             clean test all
+
+all:                test $(TARGET)
+
+$(TARGET):          $(OBJECTS)
+	$(CC) $(CFLAGS) $(INC) $^ $(MAIN) -o $@
+
+$(BUILDDIR)/%.o:    $(SRCDIR)/%.$(SRCEXT)
+	@mkdir -p $(BUILDDIR)
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $^
+
+test:               $(OBJECTS) $(TSTOBJS)
+	
+$(BUILDDIR)/%.out:      $(TSTDIR)/%.$(SRCEXT)
+	$(CC) $(CFLAGS) $(INC) -o $@ $^ $(OBJECTS)
+	./$@
 
 clean:
-	rm $(OBJS) befunge
-
-src:        $(OBJS)
-# TODO: put sources in src/, tests in tst/, and binaries in src/, redo makefile to work with this layout
-test:       test_cell 
-
-test_cell:
-	$(CC) $(CFLAGS) -o cell_test cell_test.cpp $(OBJS)
-	./cell_test
-	rm cell_test
-
-build:
-	$(CC) $(CFLAGS) -o befunge main.cpp $(OBJS)
+	$(RM) -r $(BUILDDIR) $(TARGET)
 
