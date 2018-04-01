@@ -10,7 +10,7 @@ SOURCES     = $(subst $(MAIN), , $(shell find $(SRCDIR) -type f -name *.$(SRCEXT
 OBJECTS     = $(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 TESTS       = $(shell find $(TSTDIR) -type f -name *.$(SRCEXT))
 TSTOBJS     = $(patsubst $(TSTDIR)/%, $(BUILDDIR)/%, $(TESTS:.$(SRCEXT)=.out))
-CFLAGS      = -Wall
+CFLAGS      = -Wall -g
 INC         = -I include/
 
 .PHONY:             clean test all
