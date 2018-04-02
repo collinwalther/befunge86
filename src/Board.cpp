@@ -1,4 +1,5 @@
 #include "Board.h"
+#include <stdexcept>
 
 Board::Board() {
     _height = 0;
