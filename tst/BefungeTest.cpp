@@ -8,6 +8,20 @@
 
 using namespace std;
 
+string RunAndGetStdout(const char* cmd);
+int TestOneCase(string name, string expected);
+int Multiply(); 
+
+int main() {
+    Multiply();
+    return 0;
+}
+
+int Multiply() {
+    TestOneCase("multiply", "24");
+    return 0;
+}
+
 string RunAndGetStdout(const char* cmd) {
     char buffer[128];
     string result = "";
@@ -26,21 +40,34 @@ string RunAndGetStdout(const char* cmd) {
     return result;
 }
 
-int Multiply() {
-    ifstream ifs("tst/multiply.bf");
+int TestOneCase(string name, string expected) {
+    stringstream bfPathStream, asmPathStream, execPathStream;
+    bfPathStream << "tst/" << name << ".bf";
+    asmPathStream << "tst/" << name << ".s";
+    execPathStream << "tst/" << name << ".out";
+
+    string bfPath = bfPathStream.str();
+    string asmPath = asmPathStream.str();
+    string execPath = execPathStream.str();
+
+    ifstream ifs(bfPath.c_str());
     istream& is(ifs);
-    ofstream ofs("tst/multiply.s");
+    
+    ofstream ofs(asmPath.c_str());
     ostream& os(ofs);
+    
     Befunge b(&is, &os);
     b.Run();
-    system("gcc -o tst/multiply.out tst/multiply.s");
-    string output = RunAndGetStdout("./tst/multiply.out");
-    assert(output == "24");
+
+    stringstream compileStream;
+    compileStream << "gcc -o " << execPath << " " << asmPath;
+
+    string compileCommand = compileStream.str();
+    system(compileCommand.c_str());
+
+    string result = RunAndGetStdout(execPath.c_str());
+    assert(result == expected);
+
     return 0;
 }
 
-int main() {
-    Multiply();
-    return 0;
-}
-    
