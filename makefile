@@ -25,6 +25,7 @@ $(BUILDDIR)/%.o:    $(SRCDIR)/%.$(SRCEXT)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $^
 
 test:               $(OBJECTS) $(TSTOBJS)
+	$(RM) $(TSTOBJS)
 	
 $(BUILDDIR)/%.out:      $(TSTDIR)/%.$(SRCEXT)
 	$(CC) $(CFLAGS) $(INC) -o $@ $^ $(OBJECTS)

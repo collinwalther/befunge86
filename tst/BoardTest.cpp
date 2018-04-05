@@ -100,9 +100,9 @@ int Test3by3MatrixWithHole() {
 int TestStaircase() {
     Board b;
     vector<Cell *> row0, row1, row2;
-    row0.push_back(new Cell('1'));
-    row1.push_back(new Cell('4'));    row1.push_back(new Cell('5'));
-    row2.push_back(new Cell('7'));    row2.push_back(new Cell('8'));    row2.push_back(new Cell('9'));
+    row0.push_back(CellFactory::GetCell('1'));
+    row1.push_back(CellFactory::GetCell('4'));    row1.push_back(CellFactory::GetCell('5'));
+    row2.push_back(CellFactory::GetCell('7'));    row2.push_back(CellFactory::GetCell('8'));    row2.push_back(CellFactory::GetCell('9'));
     b.SetRowAt(row0, 0);
     b.SetRowAt(row1, 1);
     b.SetRowAt(row2, 2);
@@ -146,9 +146,9 @@ int TestStaircase() {
 int TestInverseStaircase() {
     Board b;
     vector<Cell *> row0, row1, row2;
-    row0.push_back(new Cell('1'));  row0.push_back(new Cell('2'));  row0.push_back(new Cell('3'));
-    row1.push_back(new Cell('4'));  row1.push_back(new Cell('5'));
-    row2.push_back(new Cell('7'));
+    row0.push_back(CellFactory::GetCell('1'));  row0.push_back(CellFactory::GetCell('2'));  row0.push_back(CellFactory::GetCell('3'));
+    row1.push_back(CellFactory::GetCell('4'));  row1.push_back(CellFactory::GetCell('5'));
+    row2.push_back(CellFactory::GetCell('7'));
     b.SetRowAt(row0, 0);
     b.SetRowAt(row1, 1);
     b.SetRowAt(row2, 2);

@@ -2,10 +2,10 @@
 #include <cassert>
 
 int main() {
-    Cell *c = new Cell('a');
+    Cell *c = CellFactory::GetCell('a');
     assert(c->GetChar() == 'a');
 
-    c = new Cell('>');
+    c = CellFactory::GetCell('>');
     assert(c->GetChar() == '>');
 
     return 0;

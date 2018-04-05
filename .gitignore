@@ -1,3 +1,11 @@
+# Ignore build artifacts
 build/*
 bin/*
+tst/*.out
+tst/*.s
+
+# Ignore vim swap files
+*.swp
+
+# Ignore mac-specific files
 .DS_Store

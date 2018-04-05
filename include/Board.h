@@ -6,19 +6,19 @@
 
 class Board {
   private:
-    int _width;
-    int _height;
+    unsigned _width;
+    unsigned _height;
     std::vector<std::vector<Cell *> *> _cells;
     
   public:
     Board();
-    Board(char** b, int width, int height);
-    int GetWidth() { return _width; }
-    int GetHeight() { return _height; }
+    Board(char** b, unsigned width, unsigned height);
+    unsigned GetWidth() { return _width; }
+    unsigned GetHeight() { return _height; }
     std::vector<std::vector<Cell *> *> GetCells() { return _cells; }
-    std::vector<Cell *> GetRowAt(int rowIndex);
-    std::vector<Cell *> GetColumnAt(int columnIndex);
-    void SetRowAt(std::vector<Cell *> row, int rowIndex);
+    std::vector<Cell *> GetRowAt(unsigned rowIndex);
+    std::vector<Cell *> GetColumnAt(unsigned columnIndex);
+    void SetRowAt(std::vector<Cell *> row, unsigned rowIndex);
 };
 
 #endif
