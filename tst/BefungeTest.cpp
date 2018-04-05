@@ -13,11 +13,6 @@ int TestOneCase(string name, string expected);
 int Multiply(); 
 
 int main() {
-    Multiply();
-    return 0;
-}
-
-int Multiply() {
     TestOneCase("multiply", "24");
     return 0;
 }
