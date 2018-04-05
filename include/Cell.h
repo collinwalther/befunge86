@@ -11,9 +11,10 @@ class Cell {
     char _c;
     Label _labels[4];
     Cell *_cells[4];
-    virtual std::string GetNonStringModeASM() const = 0;
+    virtual std::string GetNonStringModeASM() const;
+    virtual std::string GetNonStringModeASM(Direction d) const;
     virtual std::string GetStringModeASM() const; 
-    virtual std::string GetASM() const;
+    virtual std::string GetASM(Direction d) const;
 
   public:
     char GetChar() const;
@@ -186,7 +187,7 @@ class PopChar : public Cell {
 
 class Bridge : public Cell {
   private:
-    std::string GetNonStringModeASM() const;
+    std::string GetNonStringModeASM(Direction d) const;
 
   public:
     Bridge(char c) { _c = c; }
