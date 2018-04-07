@@ -74,8 +74,8 @@ void Befunge::SetCellAdjacencies() {
 
 void Befunge::OutputEntryPoint() {
     *_os << ".text\n"
-         << "\t.globl\tmain\n"
-         << "main:\n";
+         << "\t.globl\t_main\n"
+         << "_main:\n";
 }
 
 void Befunge::OutputLeftToRight() {

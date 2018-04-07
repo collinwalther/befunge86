@@ -35,8 +35,8 @@ std::string Cell::GetOp(Direction d) const {
 std::string Cell::GetASM(Direction d) const {
     Label notStringModeLabel, exitLabel;
     std::ostringstream oss;
-    oss << "\tmovq\t" << Befunge::stringModeLabel << ", %rax\n"
-        << "\tcmpq\t$0, %rax\n"
+    //oss << "\tmovq\t" << Befunge::stringModeLabel << ", %rax\n"
+    oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << notStringModeLabel << "\n"
         << GetStringModeASM()
         << "\tjmp \t" << exitLabel << "\n"
@@ -177,15 +177,18 @@ std::string VerticalIf::GetNonStringModeASM() const {
 std::string StringMode::GetNonStringModeASM() const {
     Label falseLabel, exitLabel;
     std::ostringstream oss;
-    oss << "\tmovq\tstringMode, %rax\n"
-        << "\tcmpq\t$0, %rax\n"
+    //oss << "\tmovq\tstringMode, %rax\n"
+    //    << "\tcmpq\t$0, %rax\n"
+    oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << falseLabel << "\n"
-        << "\tmovq\t$0, %rax\n"
-        << "\tmovq\t%rax, stringMode\n"
+    //    << "\tmovq\t$0, %rax\n"
+    //    << "\tmovq\t%rax, stringMode\n"
+        << "\tmovq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tjmp \t" << exitLabel << "\n"
         << falseLabel << ":\n"
-        << "\tmovq\t$1, %rax\n"
-        << "\tmovq\t%rax, stringMode\n"
+        << "\tmovq\t$1, " << Befunge::stringModeLabel << "(%rip)\n"
+    //    << "\tmovq\t$1, %rax\n"
+    //    << "\tmovq\t%rax, stringMode\n"
         << exitLabel << ":\n";
     return oss.str();
 }
@@ -215,7 +218,7 @@ std::string PopInt::GetNonStringModeASM() const {
     oss << "\tpopq\t%rsi\n"
         << "\tleaq\t" << Befunge::intPrintSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tprintf\n";
+        << "\tcall\t_printf\n";
     return oss.str();
 }
 
@@ -224,7 +227,7 @@ std::string PopChar::GetNonStringModeASM() const {
     oss << "\tpopq\t%rsi\n"
         << "\tleaq\t" << Befunge::charPrintSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tprintf\n";
+        << "\tcall\t_printf\n";
     return oss.str();
 }
 
@@ -250,7 +253,7 @@ std::string PushInt::GetNonStringModeASM() const {
         << "\tmovq\t%rsp, %rsi\n"
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\t_scanf\n";
     return oss.str();
 }
 
@@ -260,7 +263,7 @@ std::string PushChar::GetNonStringModeASM() const {
         << "\tmovq\t%rsp, %rsi\n"
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\t_scanf\n";
     return oss.str();
 }
 
