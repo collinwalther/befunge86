@@ -174,6 +174,7 @@ std::string VerticalIf::GetNonStringModeASM() const {
 }
 
 std::string StringMode::GetNonStringModeASM() const {
+    // TODO
     Label falseLabel, exitLabel;
     std::ostringstream oss;
 #if defined(__unix__)
@@ -299,6 +300,8 @@ std::string PushChar::GetNonStringModeASM() const {
 
 std::string End::GetNonStringModeASM() const {
     std::string answer = "\tmovq\t$0, %rax\n"
+                         "\tmovq\t%rbp, %rsp\n"
+                         "\tpopq\t%rbp\n"
                          "\tret\n";
     return answer;
 }

@@ -76,11 +76,13 @@ void Befunge::OutputEntryPoint() {
     *_os << ".text\n"
 #if defined(__unix__)
          << "\t.globl\tmain\n"
-         << "main:\n";
+         << "main:\n"
 #else
          << "\t.globl\t_main\n"
-         << "_main:\n";
+         << "_main:\n"
 #endif
+         << "\tpushq\t%rbp\n"
+         << "\tmovq\t%rsp, %rbp\n";
 }
 
 void Befunge::OutputLeftToRight() {
