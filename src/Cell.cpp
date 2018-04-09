@@ -177,15 +177,15 @@ std::string StringMode::GetNonStringModeASM() const {
     Label falseLabel, exitLabel;
     std::ostringstream oss;
 #if defined(__unix__)
-    oss << "\tmovq\tstringMode, %rax\n"
+    oss << "\tmovq\t" << Befunge::stringModeLabel << "(%rip), %rax\n"
         << "\tcmpq\t$0, %rax\n"
         << "\tje  \t" << falseLabel << "\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tmovq\t%rax, stringMode\n"
+        << "\tmovq\t%rax, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tjmp \t" << exitLabel << "\n"
         << falseLabel << ":\n"
         << "\tmovq\t$1, %rax\n"
-        << "\tmovq\t%rax, stringMode\n"
+        << "\tmovq\t%rax, " << Befunge::stringModeLabel << "(%rip)\n"
         << exitLabel << ":\n";
 #else 
     oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
