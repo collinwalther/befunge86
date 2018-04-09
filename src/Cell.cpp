@@ -35,7 +35,6 @@ std::string Cell::GetOp(Direction d) const {
 std::string Cell::GetASM(Direction d) const {
     Label notStringModeLabel, exitLabel;
     std::ostringstream oss;
-    //oss << "\tmovq\t" << Befunge::stringModeLabel << ", %rax\n"
     oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << notStringModeLabel << "\n"
         << GetStringModeASM()
@@ -177,19 +176,26 @@ std::string VerticalIf::GetNonStringModeASM() const {
 std::string StringMode::GetNonStringModeASM() const {
     Label falseLabel, exitLabel;
     std::ostringstream oss;
-    //oss << "\tmovq\tstringMode, %rax\n"
-    //    << "\tcmpq\t$0, %rax\n"
+#if defined(__unix__)
+    oss << "\tmovq\tstringMode, %rax\n"
+        << "\tcmpq\t$0, %rax\n"
+        << "\tje  \t" << falseLabel << "\n"
+        << "\tmovq\t$0, %rax\n"
+        << "\tmovq\t%rax, stringMode\n"
+        << "\tjmp \t" << exitLabel << "\n"
+        << falseLabel << ":\n"
+        << "\tmovq\t$1, %rax\n"
+        << "\tmovq\t%rax, stringMode\n"
+        << exitLabel << ":\n";
+#else 
     oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << falseLabel << "\n"
-    //    << "\tmovq\t$0, %rax\n"
-    //    << "\tmovq\t%rax, stringMode\n"
         << "\tmovq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tjmp \t" << exitLabel << "\n"
         << falseLabel << ":\n"
         << "\tmovq\t$1, " << Befunge::stringModeLabel << "(%rip)\n"
-    //    << "\tmovq\t$1, %rax\n"
-    //    << "\tmovq\t%rax, stringMode\n"
         << exitLabel << ":\n";
+#endif
     return oss.str();
 }
 
@@ -216,18 +222,30 @@ std::string Discard::GetNonStringModeASM() const {
 std::string PopInt::GetNonStringModeASM() const {
     std::ostringstream oss;
     oss << "\tpopq\t%rsi\n"
+#if defined(__unix__)
+        << "\tleaq\t" << Befunge::intPrintSpecifierLabel << "(%rip), %rdi\n"
+        << "\tmovq\t$0, %rax\n"
+        << "\tcall\tprintf\n";
+#else
         << "\tleaq\t" << Befunge::intPrintSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
         << "\tcall\t_printf\n";
+#endif
     return oss.str();
 }
 
 std::string PopChar::GetNonStringModeASM() const {
     std::ostringstream oss;
     oss << "\tpopq\t%rsi\n"
+#if defined(__unix__)
+        << "\tleaq\t" << Befunge::charPrintSpecifierLabel << "(%rip), %rdi\n"
+        << "\tmovq\t$0, %rax\n"
+        << "\tcall\tprintf\n";
+#else
         << "\tleaq\t" << Befunge::charPrintSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
         << "\tcall\t_printf\n";
+#endif
     return oss.str();
 }
 
@@ -251,9 +269,15 @@ std::string PushInt::GetNonStringModeASM() const {
     std::ostringstream oss;
     oss << "\tsubq\t$4, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
+#if defined(__unix__)
+        << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
+        << "\tmovq\t$0, %rax\n"
+        << "\tcall\tscanf\n";
+#else
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
         << "\tcall\t_scanf\n";
+#endif
     return oss.str();
 }
 
@@ -261,9 +285,15 @@ std::string PushChar::GetNonStringModeASM() const {
     std::ostringstream oss;
     oss << "\tsubq\t$4, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
+#if defined(__unix__)
+        << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
+        << "\tmovq\t$0, %rax\n"
+        << "\tcall\tscanf\n";
+#else
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
         << "\tcall\t_scanf\n";
+#endif
     return oss.str();
 }
 
