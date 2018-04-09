@@ -16,6 +16,7 @@ Label Befunge::stringModeLabel = Label();
 
 void Befunge::Run() {
     ReadInputStream();
+    SetCellAdjacencies();
     OutputConstants();
     OutputEntryPoint();
     OutputLeftToRight();
@@ -49,10 +50,37 @@ void Befunge::ReadInputStream() {
     }
 }
 
+void Befunge::SetCellAdjacencies() {
+    for (unsigned i = 0; i < _board.GetHeight(); i++) {
+        std::vector<Cell *> row = _board.GetRowAt(i);
+        for (unsigned j = 0; j < row.size() - 1; j++) {
+            row[j]->SetCell(row[j + 1], RIGHT);
+            row[j + 1]->SetCell(row[j], LEFT);
+        }
+        row.front()->SetCell(row.back(), LEFT);
+        row.back()->SetCell(row.front(), RIGHT);
+    }
+    
+    for (unsigned i = 0; i < _board.GetWidth(); i++) {
+        std::vector<Cell *> column = _board.GetColumnAt(i);
+        for (unsigned j = 0; j < column.size() - 1; j++) {
+            column[j]->SetCell(column[j + 1], DOWN);
+            column[j + 1]->SetCell(column[j], UP);
+        }
+        column.front()->SetCell(column.back(), UP);
+        column.back()->SetCell(column.front(), DOWN);
+    }
+}
+
 void Befunge::OutputEntryPoint() {
     *_os << ".text\n"
+#if defined(__unix__)
          << "\t.globl\tmain\n"
          << "main:\n";
+#else
+         << "\t.globl\t_main\n"
+         << "_main:\n";
+#endif
 }
 
 void Befunge::OutputLeftToRight() {

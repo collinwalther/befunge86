@@ -12,6 +12,7 @@ class Befunge {
     std::ostream *_os;
     Board _board;
     void ReadInputStream();
+    void SetCellAdjacencies();
     void OutputEntryPoint();
     void OutputLeftToRight();
     void OutputRightToLeft();
