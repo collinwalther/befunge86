@@ -63,6 +63,11 @@ int TestOneCase(string name, string expected) {
     string result = RunAndGetStdout(execPath.c_str());
     assert(result == expected);
 
+    // Clean up after ourselves
+    stringstream rmCommand;
+    rmCommand << "rm -f " << asmPath << " " << execPath;
+    system(rmCommand.str().c_str());
+
     return 0;
 }
 
