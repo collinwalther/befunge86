@@ -139,6 +139,7 @@ class VerticalIf : public Cell {
 
 class StringMode : public Cell {
   private:
+    std::string GetASM(Direction d) const;
     std::string GetNonStringModeASM() const;
 
   public:
