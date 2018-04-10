@@ -45,6 +45,10 @@ std::string Cell::GetASM(Direction d) const {
     return oss.str();
 }
 
+std::string StringMode::GetASM(Direction d) const {
+    return GetNonStringModeASM();
+}
+
 std::string Cell::GetStringModeASM() const {
     std::ostringstream oss;
     oss << "\tpushq\t$" << (int) GetChar() << "\n";
