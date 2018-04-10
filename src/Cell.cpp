@@ -273,34 +273,46 @@ std::string Put::GetNonStringModeASM() const {
 }
 
 std::string PushInt::GetNonStringModeASM() const {
+    Label exitLabel;
     std::ostringstream oss;
-    oss << "\tsubq\t$4, %rsp\n"
+    oss << "\tsubq\t$8, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
 #if defined(__unix__)
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\tscanf\n"
 #else
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\t_scanf\n";
+        << "\tcall\t_scanf\n"
 #endif
+        << "\tcmpl\t$-1, %eax\n"
+        << "\tjne \t" << exitLabel << "\n"
+        << "\tpopq\t%rax\n"
+        << "\tpushq\t$-1\n"
+        << exitLabel << ":\n";
     return oss.str();
 }
 
 std::string PushChar::GetNonStringModeASM() const {
+    Label exitLabel;
     std::ostringstream oss;
-    oss << "\tsubq\t$4, %rsp\n"
+    oss << "\tsubq\t$8, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
 #if defined(__unix__)
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\tscanf\n"
 #else
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\t_scanf\n";
+        << "\tcall\t_scanf\n"
 #endif
+        << "\tcmpl\t$-1, %eax\n"
+        << "\tjne \t" << exitLabel << "\n"
+        << "\tpopq\t%rax\n"
+        << "\tpushq\t$-1\n"
+        << exitLabel << ":\n";
     return oss.str();
 }
 
