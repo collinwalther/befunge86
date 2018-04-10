@@ -14,6 +14,9 @@ int Multiply();
 
 int main() {
     TestOneCase("multiply", "24");
+    TestOneCase("hello0", "Hello, World!\n");
+    TestOneCase("hello1", "Hello, World!\n");
+    TestOneCase("hello2", "Hello, World!\n");
     return 0;
 }
 

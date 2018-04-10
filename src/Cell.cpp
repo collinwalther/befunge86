@@ -35,14 +35,20 @@ std::string Cell::GetOp(Direction d) const {
 std::string Cell::GetASM(Direction d) const {
     Label notStringModeLabel, exitLabel;
     std::ostringstream oss;
-    oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
+    oss << *(GetLabel(d)) << ":\n"
+        << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << notStringModeLabel << "\n"
         << GetStringModeASM()
         << "\tjmp \t" << exitLabel << "\n"
         << notStringModeLabel << ":\n"
         << GetNonStringModeASM(d)
-        << exitLabel << ":\n";
+        << exitLabel << ":\n"
+        << "\tjmp \t" << *(GetCell(d)->GetLabel(d)) << "\n";
     return oss.str();
+}
+
+std::string StringMode::GetASM(Direction d) const {
+    return GetNonStringModeASM();
 }
 
 std::string Cell::GetStringModeASM() const {
@@ -267,34 +273,46 @@ std::string Put::GetNonStringModeASM() const {
 }
 
 std::string PushInt::GetNonStringModeASM() const {
+    Label exitLabel;
     std::ostringstream oss;
-    oss << "\tsubq\t$4, %rsp\n"
+    oss << "\tsubq\t$8, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
 #if defined(__unix__)
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\tscanf\n"
 #else
         << "\tleaq\t" << Befunge::intScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\t_scanf\n";
+        << "\tcall\t_scanf\n"
 #endif
+        << "\tcmpl\t$-1, %eax\n"
+        << "\tjne \t" << exitLabel << "\n"
+        << "\tpopq\t%rax\n"
+        << "\tpushq\t$-1\n"
+        << exitLabel << ":\n";
     return oss.str();
 }
 
 std::string PushChar::GetNonStringModeASM() const {
+    Label exitLabel;
     std::ostringstream oss;
-    oss << "\tsubq\t$4, %rsp\n"
+    oss << "\tsubq\t$8, %rsp\n"
         << "\tmovq\t%rsp, %rsi\n"
 #if defined(__unix__)
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\tscanf\n";
+        << "\tcall\tscanf\n"
 #else
         << "\tleaq\t" << Befunge::charScanSpecifierLabel << "(%rip), %rdi\n"
         << "\tmovq\t$0, %rax\n"
-        << "\tcall\t_scanf\n";
+        << "\tcall\t_scanf\n"
 #endif
+        << "\tcmpl\t$-1, %eax\n"
+        << "\tjne \t" << exitLabel << "\n"
+        << "\tpopq\t%rax\n"
+        << "\tpushq\t$-1\n"
+        << exitLabel << ":\n";
     return oss.str();
 }
 
