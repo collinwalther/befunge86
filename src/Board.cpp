@@ -26,11 +26,7 @@ std::vector<Cell *> Board::GetRowAt(unsigned rowIndex) {
     std::vector<Cell *> newRow;
     std::vector<Cell *> row = *(GetCells()[rowIndex]);
     for (unsigned i = 0; i < GetWidth(); i++) {
-        if (i < row.size()) {
-            newRow.push_back(row[i]);
-        } else {
-            newRow.push_back(CellFactory::GetCell(' '));
-        }
+        newRow.push_back(row[i]);
     }
     return newRow; 
 }
@@ -42,11 +38,7 @@ std::vector<Cell *> Board::GetColumnAt(unsigned columnIndex) {
 
     std::vector<Cell *> col;
     for (unsigned i = 0; i < GetHeight(); i++) {
-        if (columnIndex >= _cells[i]->size()) {
-            col.push_back(CellFactory::GetCell(' '));
-        } else {
-            col.push_back((*(_cells[i]))[columnIndex]);
-        }
+        col.push_back((*(_cells[i]))[columnIndex]);
     }
     return col;
 }
@@ -70,6 +62,12 @@ void Board::SetRowAt(std::vector<Cell *> row, unsigned rowIndex) {
 
     if (row.size() > GetWidth()) {
         _width = row.size();
+    }
+
+    for (unsigned i = 0; i < GetHeight(); i++) {
+        for (unsigned j = GetCells()[i]->size(); j < GetWidth(); j++) {
+            _cells[i]->push_back(CellFactory::GetCell(' '));
+        }
     }
 }
 
