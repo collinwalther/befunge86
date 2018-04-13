@@ -5,7 +5,7 @@ A compiler for the esoteric programming language befunge.  Not truly up to the o
 ```bash
 make
 ```
-Making runs tests and places the executable at ./bin/befunge
+Making runs tests and places the executable at ./bin/befunge.
 
 # Usage
 ```bash
