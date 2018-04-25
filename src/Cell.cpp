@@ -35,8 +35,7 @@ std::string Cell::GetOp(Direction d) const {
 std::string Cell::GetASM(Direction d) const {
     Label notStringModeLabel, exitLabel;
     std::ostringstream oss;
-    oss << *(GetLabel(d)) << ":\n"
-        << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
+    oss << "\tcmpq\t$0, " << Befunge::stringModeLabel << "(%rip)\n"
         << "\tje  \t" << notStringModeLabel << "\n"
         << GetStringModeASM()
         << "\tjmp \t" << exitLabel << "\n"
